@@ -31,6 +31,8 @@
 <div class="colors">
   <p>Colors:</p>
   <ul>
-    <li *ngFor="let color of colors()">{{ color }}</li>
+    @for (color of colors(); track color) {
+      <li>{{ color }}</li>
+    }
   </ul>
 </div>

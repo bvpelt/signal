@@ -1,23 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { card } from '../data/mock-data';
 import { CardsService } from '../services/cards.service';
-
+import { CardStore } from '../store/card.store';
 
 @Component({
   selector: 'app-shop',
   imports: [],
   templateUrl: './shop.component.html',
-  styleUrl: './shop.component.scss'
+  styleUrl: './shop.component.scss',
 })
 export class ShopComponent implements OnInit {
-
+  store = inject(CardStore);
   cards: card[] = [];
 
   constructor(cardsService: CardsService) {
-    cardsService.getCards().then(cards => this.cards = cards);
+    
   }
 
   ngOnInit() {
-    console.log(this.cards);
+    this.store.loadAll();
+    console.log('ngOnInit: ', this.store.cards());
   }
 }

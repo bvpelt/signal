@@ -1,10 +1,10 @@
 import { Component, signal, computed, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-shome',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './shome.component.html',
   styleUrl: './shome.component.scss',
 })

@@ -1,5 +1,11 @@
-<div>
-  <div *ngFor="let card of cards()">
-    <p>{{ card.name }} - {{ card.price  }}</p>
+<div class="cards">
+  @for(card of store.cards(); track card.id; let index = $index) {
+  <div class="card">
+    {{ card.title }} 
+    <div class="image">
+    <img src={{card.image}} width="170" height="180"/>
+    </div> 
+    price: {{ card.price }}
   </div>
+  }
 </div>
