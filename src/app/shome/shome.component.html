@@ -1,0 +1,36 @@
+<div class="counter">
+  <div>SCounter: {{ scounter() }}</div>
+</div>
+
+<div class="btngroup">
+  <p>Signal behaviour (counter)</p>
+  <button (click)="sincrement()">Increment +</button>
+  <button (click)="sdecrement()">Decrement -</button>
+</div>
+
+<div class="btngroup">
+  <p>Computed signal</p>
+  <button (click)="sinclenght()">Add Lenght +</button>
+  <button (click)="sdeclenght()">Remove Lenght +</button>
+  <button (click)="sincbreadth()">Add Breadh +</button>
+  <button (click)="sdecbreadth()">Remove Breadth +</button>
+</div>
+
+<div class="colors">
+  <div>Length: {{ length() }}</div>
+  <div>Length: {{ breadth() }}</div>
+  <div>Length: {{ area() }}</div>
+</div>
+
+<div class="btngroup">
+  <p>Signal behaviour (colors)</p>
+  <button (click)="sinccolor()">Add +</button>
+  <button (click)="sdeccolor()">Remove +</button>
+</div>
+
+<div class="colors">
+  <p>Colors:</p>
+  <ul>
+    <li *ngFor="let color of colors()">{{ color }}</li>
+  </ul>
+</div>
