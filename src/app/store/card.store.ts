@@ -1,4 +1,4 @@
-import { card } from '../data/mock-data';
+import { card } from '../data/card';
 import { computed, inject } from '@angular/core';
 import { patchState, withState, signalStore, withMethods } from '@ngrx/signals';
 import { CardsService } from '../services/cards.service';

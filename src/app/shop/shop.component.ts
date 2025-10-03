@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { card } from '../data/mock-data';
+import { Card } from '../data/card';
 import { CardsService } from '../services/cards.service';
-import { CardStore } from '../store/card.store';
+import { DataStore } from '../store/data.store';
 
 @Component({
   selector: 'app-shop',
@@ -10,15 +10,24 @@ import { CardStore } from '../store/card.store';
   styleUrl: './shop.component.scss',
 })
 export class ShopComponent implements OnInit {
-  store = inject(CardStore);
-  cards: card[] = [];
+  dataStore = inject(DataStore);
+  cards: Card[] = [];
 
   constructor(cardsService: CardsService) {
     
   }
 
   ngOnInit() {
-    this.store.loadAll();
-    console.log('ngOnInit: ', this.store.cards());
+    this.dataStore.loadAllCards();
+    console.log('ngOnInit: ', this.dataStore.cards());
+  }
+
+  addToShoppingCard(card: Card) {
+    console.log('ShopComponent addToShoppingCard: ', card);
+    this.dataStore.addToShoppingCard(card);
+  }
+
+  removeCardFromOrder(card: Card) {
+    this.dataStore.removeCardFromOrder(card);
   }
 }
