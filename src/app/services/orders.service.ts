@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, Signal, signal } from '@angular/core';
 import { Card } from '../data/card';
 import { Order } from '../data/order';
 
@@ -18,87 +18,90 @@ export class OrdersService {
     return this.allOrders();
   }
 
-  async addCardToOrder(customerId: number, card: Card): Promise<Order> {
+  async addCardToOrder(
+    customerId: number,
+    card: Card,
+  ): Promise<Signal<Order[]>> {
     console.log('OrdersService addCardToOrder: ', customerId, card);
 
     // Zoek bestaande order voor deze klant en dit artikel
     const existingOrder = this.orders().find(
-      (order) => order.customerid === customerId && order.artikelid === card.id
+      (order) => order.customerid === customerId && order.artikelid === card.id,
     );
 
     if (existingOrder) {
-      // Update bestaande order
+      console.log(
+        'OrdersService addCardToOrder existingOrder: ',
+        existingOrder,
+      );
+      // Update bestaande order - voeg 1 toe aan quantity
       const updatedOrder: Order = {
         ...existingOrder,
-        quantity: existingOrder.quantity + card.quantity,
-        // Optioneel: update prijs indien deze gewijzigd is
+        quantity: existingOrder.quantity + 1,
         price: card.price,
       };
+      console.log('OrdersService addCardToOrder updatedOrder: ', updatedOrder);
 
+      console.log('OrdersService addCardToOrder orders: ', this.orders());
       this.orders.update((orders) =>
         orders.map((order) =>
-          order.id === existingOrder.id ? updatedOrder : order
-        )
+          order.id === existingOrder.id ? updatedOrder : order,
+        ),
       );
-      console.log(
-        'OrdersService addCardToOrder existing Order: ',
-        updatedOrder
-      );
-      card.quantity = card.quantity + 1; // Zorg dat er altijd een quantity is
-      return updatedOrder;
+      console.log('OrdersService addCardToOrder orders: ', this.orders());
+
+      console.log('OrdersService addCardToOrder updated Order: ', updatedOrder);
+      return this.orders;
     } else {
-      // Maak nieuwe order aan
+      // Maak nieuwe order aan met quantity 1
       const newOrder: Order = {
         id: this.nextOrderId(),
         customerid: customerId,
         artikelid: card.id,
-        quantity: card.quantity,
+        description: card.title,
+        quantity: 1,
         price: card.price,
       };
 
       this.orders.update((orders) => [...orders, newOrder]);
       this.nextOrderId.update((id) => id + 1);
-      console.log('OrdersService addCardToOrder existing Order: ', newOrder);
-      card.quantity = card.quantity + 1; // Zorg dat er altijd een quantity is
-      return newOrder;
+      console.log('OrdersService addCardToOrder orders: ', this.orders());
+
+      console.log('OrdersService addCardToOrder new Order: ', newOrder);
+      return this.orders; //newOrder;
     }
   }
 
   async removeCardFromOrder(
     customerId: number,
-    card: Card
+    card: Card,
   ): Promise<Order | null> {
-    // Zoek de bestaande order voor deze klant en dit artikel
     const existingOrder = this.orders().find(
-      (order) => order.customerid === customerId && order.artikelid === card.id
+      (order) => order.customerid === customerId && order.artikelid === card.id,
     );
 
     if (!existingOrder) {
-      // Order bestaat niet, return null
       return null;
     }
 
-    if (existingOrder.quantity <= card.quantity) {
-      // Verwijder de hele order als quantity 0 of lager wordt
+    if (existingOrder.quantity <= 1) {
+      // Verwijder de hele order als quantity 1 of lager is
       this.orders.update((orders) =>
-        orders.filter((order) => order.id !== existingOrder.id)
+        orders.filter((order) => order.id !== existingOrder.id),
       );
-      card.quantity = card.quantity - 1;
       return null;
     } else {
-      // Verminder de quantity
+      // Verminder de quantity met 1
       const updatedOrder: Order = {
         ...existingOrder,
-        quantity: existingOrder.quantity - card.quantity,
+        quantity: existingOrder.quantity - 1,
       };
 
       this.orders.update((orders) =>
         orders.map((order) =>
-          order.id === existingOrder.id ? updatedOrder : order
-        )
+          order.id === existingOrder.id ? updatedOrder : order,
+        ),
       );
-
-      card.quantity = card.quantity - 1; // Zorg dat er altijd een quantity is
 
       return updatedOrder;
     }
@@ -106,10 +109,10 @@ export class OrdersService {
 
   async decrementCardInOrder(
     customerId: number,
-    cardId: number
+    cardId: number,
   ): Promise<Order | null> {
     const existingOrder = this.orders().find(
-      (order) => order.customerid === customerId && order.artikelid === cardId
+      (order) => order.customerid === customerId && order.artikelid === cardId,
     );
 
     if (!existingOrder) {
@@ -119,7 +122,7 @@ export class OrdersService {
     if (existingOrder.quantity <= 1) {
       // Verwijder order als quantity 1 of minder is
       this.orders.update((orders) =>
-        orders.filter((order) => order.id !== existingOrder.id)
+        orders.filter((order) => order.id !== existingOrder.id),
       );
       return null;
     } else {
@@ -131,8 +134,8 @@ export class OrdersService {
 
       this.orders.update((orders) =>
         orders.map((order) =>
-          order.id === existingOrder.id ? updatedOrder : order
-        )
+          order.id === existingOrder.id ? updatedOrder : order,
+        ),
       );
 
       return updatedOrder;
@@ -146,14 +149,14 @@ export class OrdersService {
   getTotalQuantity(customerId: number): number {
     return this.getOrdersByCustomer(customerId).reduce(
       (sum, order) => sum + order.quantity,
-      0
+      0,
     );
   }
 
   getTotalPrice(customerId: number): number {
     return this.getOrdersByCustomer(customerId).reduce(
       (sum, order) => sum + order.quantity * order.price,
-      0
+      0,
     );
   }
 

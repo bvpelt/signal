@@ -19,7 +19,7 @@ export class ShomeComponent {
     effect(() => {
       console.log('Effect due to counter change:', this.scounter());
     });
-        effect(() => {
+    effect(() => {
       console.log('Effect due to colors change:', this.colors());
     });
   }

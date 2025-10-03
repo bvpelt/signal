@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
   counter = 0;
-  
+
   increment() {
     this.counter++;
   }
@@ -16,5 +16,4 @@ export class HomeComponent {
   decrement() {
     this.counter--;
   }
-
 }

@@ -5,4 +5,4 @@ export type Card = {
   description: string;
   price: number;
   quantity: number;
-}
+};
