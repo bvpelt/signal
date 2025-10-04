@@ -1,0 +1,15 @@
+<div>
+  <h2>Log Messages</h2>
+  <ul>
+    @for (log of logMessages; track log) {
+      <li>
+        <strong
+          >{{ log.timestamp | date: "yyyy-MM-dd HH:mm:ss" }} [{{log.severity}}] [{{
+            log.module
+          }}]:</strong
+        >
+        {{ log.message }}
+      </li>
+    }
+  </ul>
+</div>

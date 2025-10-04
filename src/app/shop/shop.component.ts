@@ -4,6 +4,7 @@ import { CardsService } from '../services/cards.service';
 import { DataStore } from '../store/data.store';
 import { OrdersService } from '../services/orders.service';
 import { OrdercardComponent } from '../ordercard/ordercard.component';
+import { LoggerService } from '../services/logger.service';
 
 @Component({
   selector: 'app-shop',
@@ -13,16 +14,17 @@ import { OrdercardComponent } from '../ordercard/ordercard.component';
 })
 export class ShopComponent implements OnInit {
   dataStore = inject(DataStore);
-  cards = this.dataStore.cards;
   customerId = 1; // Of haal op uit auth service
 
   constructor(
     private cardsService: CardsService,
     private orderService: OrdersService,
+    private loggerService: LoggerService,
   ) {}
 
   ngOnInit() {
     this.dataStore.loadAllCards();
+    this.loggerService.log('ShopComponent', 'Shop component initialized');
   }
 
   addToShoppingCard(card: Card) {
