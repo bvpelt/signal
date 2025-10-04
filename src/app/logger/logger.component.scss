@@ -1,4 +1,99 @@
-ul {
-  list-style-type: none;
-  padding-left: 0; // Also remove default padding
+:host {
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    border-left: 4px solid;
+    background-color: #f8f9fa;
+
+    strong {
+      font-weight: 600;
+    }
+
+    &.severity-debug {
+      border-left-color: #6c757d;
+      color: rgb(1, 10, 19);
+      
+      strong {
+        color: rgb(1, 10, 19);
+      }
+    }
+
+    &.severity-info {
+      border-left-color: #033d64;;
+      color: rgb(1, 10, 19);
+      
+      strong {
+        color: #033d64;;
+      }
+    }
+
+    &.severity-warning {
+      border-left-color: #f39c12;
+    
+      color: rgb(1, 10, 19);
+      
+      strong {
+        color: #e67e22;
+      }
+    }
+
+    &.severity-error {
+      border-left-color: #e74c3c;
+    
+      color: rgb(1, 10, 19);
+      
+      strong {
+        color: #c0392b;
+      }
+    }
+  }
+
+  .severity-filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+
+      input[type="checkbox"] {
+        cursor: pointer;
+      }
+    }
+
+    button {
+      margin-left: auto;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      
+      &:hover {
+        background-color: #c82333;
+      }
+    }
+  }
+
+  .no-logs {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    font-style: italic;
+  }
 }

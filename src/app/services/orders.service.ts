@@ -1,6 +1,7 @@
 import { Injectable, Signal, signal } from '@angular/core';
 import { Card } from '../data/card';
 import { Order } from '../data/order';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class OrdersService {
   // Readonly signal voor externe toegang
   readonly allOrders = this.orders.asReadonly();
 
-  constructor() {}
+  constructor(private loggerservice: LoggerService) {}
 
   async getOrders(): Promise<Order[]> {
     return this.allOrders();
@@ -66,6 +67,10 @@ export class OrdersService {
     );
 
     if (!existingOrder) {
+      this.loggerservice.error(
+        'OrdersService',
+        `No existing order found for customer ${customerId} and card ${card.id}`,
+      );
       return null;
     }
 
@@ -73,6 +78,10 @@ export class OrdersService {
       // Verwijder de hele order als quantity 1 of lager is
       this.orders.update((orders) =>
         orders.filter((order) => order.id !== existingOrder.id),
+      );
+       this.loggerservice.warning(
+        'OrdersService',
+        `Order for customer ${customerId} and card ${card.id} removed`,
       );
       return null;
     } else {

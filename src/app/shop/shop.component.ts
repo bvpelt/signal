@@ -17,22 +17,30 @@ export class ShopComponent implements OnInit {
   customerId = 1; // Of haal op uit auth service
 
   constructor(
-    private cardsService: CardsService,
+    //    private cardsService: CardsService,
     private orderService: OrdersService,
     private loggerService: LoggerService,
   ) {}
 
   ngOnInit() {
     this.dataStore.loadAllCards();
-    this.loggerService.log('ShopComponent', 'Shop component initialized');
+    this.loggerService.info('ShopComponent', 'Shop component initialized');
   }
 
   addToShoppingCard(card: Card) {
     this.dataStore.addToShoppingCard(card);
+    this.loggerService.debug(
+      'ShopComponent',
+      'After addToShoppingCard, card: ' + JSON.stringify(card),
+    );
   }
 
   removeCardFromOrder(card: Card) {
     this.dataStore.removeCardFromOrder(card);
+    this.loggerService.debug(
+      'ShopComponent',
+      'After removeCardFromOrder, card: ' + JSON.stringify(card),
+    );
   }
 
   // Haal de quantity op uit de orders voor een specifieke card
@@ -43,6 +51,7 @@ export class ShopComponent implements OnInit {
         (order) =>
           order.customerid === this.customerId && order.artikelid === cardId,
       );
+
     return order ? order.quantity : 0;
   }
 }

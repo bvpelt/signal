@@ -4,6 +4,7 @@ import { computed, inject } from '@angular/core';
 import { patchState, withState, signalStore, withMethods } from '@ngrx/signals';
 import { CardsService } from '../services/cards.service';
 import { OrdersService } from '../services/orders.service';
+import { LoggerService } from '../services/logger.service';
 
 type DataState = {
   cards: Card[];
@@ -19,28 +20,39 @@ const initialState: DataState = {
 
 export const DataStore = signalStore(
   { providedIn: 'root' },
-  withState(initialState), // state
+  withState(initialState), // initial state
   withMethods((store) => {
     const cardService = inject(CardsService);
     const orderService = inject(OrdersService);
+    const loggerService = inject(LoggerService);
 
     return {
       async loadAllCards() {
+        loggerService.debug('DataStore', 'Loading all cards');
         patchState(store, { loading: true }); // partial update of the state
         const cards = await cardService.getCards();
         patchState(store, { cards, loading: false });
       },
       async loadAllOrders() {
+        loggerService.debug('DataStore', 'Loading all orders');
         patchState(store, { loading: true }); // partial update of the state
         const orders = await orderService.getOrders();
         patchState(store, { orders, loading: false });
       },
       async addToShoppingCard(card: Card) {
+        loggerService.debug(
+          'DataStore',
+          'addToShoppingCard card: ' + JSON.stringify(card),
+        );
         var customer: number = 1;
         const orders = await orderService.addCardToOrder(customer, card);
         patchState(store, { orders: orders() });
       },
       async removeCardFromOrder(card: Card) {
+          loggerService.debug(
+          'DataStore',
+          'removeCardFromOrder card: ' + JSON.stringify(card),
+        );
         const customer: number = 1;
         await orderService.removeCardFromOrder(customer, card);
 

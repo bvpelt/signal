@@ -1,29 +1,34 @@
 import { Injectable, signal } from '@angular/core';
-import { Logmessage, Severity } from '../data/logmesage';
+import { Logmessage, Severity } from '../data/logmessage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoggerService {
-  private messages = signal<Logmessage[]>([]);
+  private logMessages = signal<Logmessage[]>([]);
 
-  // Readonly signal voor externe toegang
-  readonly allOrders = this.messages.asReadonly();
+  // Return readonly signal for components to consume
+  allOrders() {
+    return this.logMessages();
+  }
 
-  constructor() {}
-
+  // Main logging method
   log(module: string, message: string, severity: Severity = 'info'): void {
     const logMessage: Logmessage = {
       module,
-      severity, // Make sure this is included
+      severity,
       message,
       timestamp: new Date(),
     };
 
-    this.messages.update((messages) => [...messages, logMessage]);
+    this.logMessages.update((messages) => [...messages, logMessage]);
   }
 
-  // Convenience methods
+  // Convenience methods for different severity levels
+  debug(module: string, message: string): void {
+    this.log(module, message, 'debug');
+  }
+
   info(module: string, message: string): void {
     this.log(module, message, 'info');
   }
@@ -36,7 +41,13 @@ export class LoggerService {
     this.log(module, message, 'error');
   }
 
+  // Clear all log messages
   clear(): void {
-    this.messages.set([]);
+    this.logMessages.set([]);
+  }
+
+  // Get count of messages by severity
+  getCountBySeverity(severity: Severity): number {
+    return this.logMessages().filter((log) => log.severity === severity).length;
   }
 }

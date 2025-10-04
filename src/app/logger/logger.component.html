@@ -1,15 +1,68 @@
 <div>
   <h2>Log Messages</h2>
-  <ul>
-    @for (log of logMessages; track log) {
-      <li>
-        <strong
-          >{{ log.timestamp | date: "yyyy-MM-dd HH:mm:ss" }} [{{log.severity}}] [{{
-            log.module
-          }}]:</strong
-        >
-        {{ log.message }}
-      </li>
+
+  <div class="severity-filters">
+    <label>
+      <input
+        id="debug"
+        type="checkbox"
+        [checked]="isSeveritySelected('debug')"
+        (change)="toggleSeverity('debug')"
+      />
+      Debug
+    </label>
+    <label>
+      <input
+        id="info"
+        type="checkbox"
+        [checked]="isSeveritySelected('info')"
+        (change)="toggleSeverity('info')"
+      />
+      Info
+    </label>
+
+    <label>
+      <input
+        id="warning"
+        type="checkbox"
+        [checked]="isSeveritySelected('warning')"
+        (change)="toggleSeverity('warning')"
+      />
+      Warning
+    </label>
+
+    <label>
+      <input
+        id="error"
+        type="checkbox"
+        [checked]="isSeveritySelected('error')"
+        (change)="toggleSeverity('error')"
+      />
+      Error
+    </label>
+    <button (click)="clearLogs()">Clear Logs</button>
+  </div>
+
+  <div class="log-list">
+    @if (logMessages().length === 0) {
+      <p class="no-logs">No log messages to display</p>
+    } @else {
+      <ul>
+        @for (log of logMessages(); track log) {
+          <li
+            [class.severity-debug]="log.severity === 'debug'"
+            [class.severity-info]="log.severity === 'info'"
+            [class.severity-warning]="log.severity === 'warning'"
+            [class.severity-error]="log.severity === 'error'"
+          >
+            <strong>
+              {{ log.timestamp | date: "yyyy-MM-dd HH:mm:ss" }}
+              [{{ log.severity | uppercase }}] [{{ log.module }}]:
+            </strong>
+            {{ log.message }}
+          </li>
+        }
+      </ul>
     }
-  </ul>
+  </div>
 </div>
