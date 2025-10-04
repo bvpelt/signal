@@ -36,16 +36,9 @@ export const DataStore = signalStore(
         patchState(store, { orders, loading: false });
       },
       async addToShoppingCard(card: Card) {
-        console.log('dataStore addToShoppingCard: ', card);
         var customer: number = 1;
         const orders = await orderService.addCardToOrder(customer, card);
         patchState(store, { orders: orders() });
-        /*
-        patchState(store, (state) => ({
-          orders: [...state.orders, order],
-        }));
-        */
-        console.log('dataStore addToShoppingCard orders: ', store.orders());
       },
       async removeCardFromOrder(card: Card) {
         const customer: number = 1;

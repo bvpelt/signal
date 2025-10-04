@@ -23,11 +23,9 @@ export class ShopComponent implements OnInit {
 
   ngOnInit() {
     this.dataStore.loadAllCards();
-    console.log('ngOnInit: ', this.dataStore.cards());
   }
 
   addToShoppingCard(card: Card) {
-    console.log('ShopComponent addToShoppingCard: ', card);
     this.dataStore.addToShoppingCard(card);
   }
 

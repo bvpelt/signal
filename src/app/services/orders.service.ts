@@ -22,35 +22,23 @@ export class OrdersService {
     customerId: number,
     card: Card,
   ): Promise<Signal<Order[]>> {
-    console.log('OrdersService addCardToOrder: ', customerId, card);
-
     // Zoek bestaande order voor deze klant en dit artikel
     const existingOrder = this.orders().find(
       (order) => order.customerid === customerId && order.artikelid === card.id,
     );
 
     if (existingOrder) {
-      console.log(
-        'OrdersService addCardToOrder existingOrder: ',
-        existingOrder,
-      );
       // Update bestaande order - voeg 1 toe aan quantity
       const updatedOrder: Order = {
         ...existingOrder,
         quantity: existingOrder.quantity + 1,
         price: card.price,
       };
-      console.log('OrdersService addCardToOrder updatedOrder: ', updatedOrder);
-
-      console.log('OrdersService addCardToOrder orders: ', this.orders());
       this.orders.update((orders) =>
         orders.map((order) =>
           order.id === existingOrder.id ? updatedOrder : order,
         ),
       );
-      console.log('OrdersService addCardToOrder orders: ', this.orders());
-
-      console.log('OrdersService addCardToOrder updated Order: ', updatedOrder);
       return this.orders;
     } else {
       // Maak nieuwe order aan met quantity 1
@@ -65,9 +53,6 @@ export class OrdersService {
 
       this.orders.update((orders) => [...orders, newOrder]);
       this.nextOrderId.update((id) => id + 1);
-      console.log('OrdersService addCardToOrder orders: ', this.orders());
-
-      console.log('OrdersService addCardToOrder new Order: ', newOrder);
       return this.orders; //newOrder;
     }
   }
