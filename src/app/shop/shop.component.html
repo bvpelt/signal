@@ -1,26 +1,32 @@
-<div class="cards">
-  @for(card of dataStore.cards(); track card.id; let index = $index) {
-  <div class="card">
-    <div style="font-weight: bold">
-      {{ card.title }}
-    </div>
-    <div class="image">
-      <img src="{{ card.image }}" width="170" height="180" />
-    </div>
-    <div>price       : {{ card.price }}</div>
-    <div>
-      ordered: {{ getOrderedQuantity(card.id) }}
-    </div>
-    <div class="buttons">
-      <button (click)="addToShoppingCard(card)">Add +</button>
-      <button (click)="removeCardFromOrder(card)">Remove -</button>
-    </div>
+<h2>Number of products: {{ dataStore.cardCount() }}</h2>
+
+@if (dataStore.loading()) {
+  <div>
+    <p>Loading...</p>
   </div>
+}
+
+<div class="cards">
+  @for (card of dataStore.sortedCards(); track card.id; let index = $index) {
+    <div class="card">
+      <div style="font-weight: bold">
+        {{ card.title }}
+      </div>
+      <div class="image">
+        <img src="{{ card.image }}" width="170" height="180" />
+      </div>
+      <div>price : {{ card.price }}</div>
+      <div>ordered: {{ getOrderedQuantity(card.id) }}</div>
+      <div class="buttons">
+        <button (click)="addToShoppingCard(card)">Add +</button>
+        <button (click)="removeCardFromOrder(card)">Remove -</button>
+      </div>
+    </div>
   }
 </div>
 
 @if (dataStore.orders().length > 0) {
-<div class="ordercard">
-  <app-ordercard></app-ordercard>
-</div>
+  <div class="ordercard">
+    <app-ordercard></app-ordercard>
+  </div>
 }

@@ -19,26 +19,28 @@
     &.severity-debug {
       border-left-color: #6c757d;
       color: rgb(1, 10, 19);
-      
+
       strong {
         color: rgb(1, 10, 19);
       }
     }
 
     &.severity-info {
-      border-left-color: #033d64;;
+      border-left-color: #033d64;
+      ;
       color: rgb(1, 10, 19);
-      
+
       strong {
-        color: #033d64;;
+        color: #033d64;
+        ;
       }
     }
 
     &.severity-warning {
       border-left-color: #f39c12;
-    
+
       color: rgb(1, 10, 19);
-      
+
       strong {
         color: #e67e22;
       }
@@ -46,9 +48,9 @@
 
     &.severity-error {
       border-left-color: #e74c3c;
-    
+
       color: rgb(1, 10, 19);
-      
+
       strong {
         color: #c0392b;
       }
@@ -61,7 +63,7 @@
     align-items: center;
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background-color: #f8f9fa;
+    background-color: #c3dbf1;
     border-radius: 4px;
 
     label {
@@ -83,7 +85,7 @@
       color: white;
       border: none;
       border-radius: 4px;
-      
+
       &:hover {
         background-color: #c82333;
       }

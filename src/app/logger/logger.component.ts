@@ -45,6 +45,22 @@ export class LoggerComponent {
     return this.selectedSeverities().has(severity);
   }
 
+  isAllSelected(): boolean {
+    const allSeverities: Severity[] = ['debug', 'info', 'warning', 'error'];
+    return this.selectedSeverities().size === allSeverities.length; 
+  }
+
+  toggleAll(): void {
+    const allSeverities: Severity[] = ['debug', 'info', 'warning', 'error'];
+    this.selectedSeverities.update(current => {
+      if (current.size === allSeverities.length) {
+        return new Set<Severity>();
+      } else {
+        return new Set(allSeverities);
+      }
+    });
+  }
+
   // Clear all logs
   clearLogs(): void {
     this.loggerService.clear();

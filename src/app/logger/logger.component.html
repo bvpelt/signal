@@ -4,6 +4,15 @@
   <div class="severity-filters">
     <label>
       <input
+        id="all"
+        type="checkbox"
+        [checked]="isAllSelected()"
+        (change)="toggleAll()"
+      />
+      All
+    </label>
+    <label>
+      <input
         id="debug"
         type="checkbox"
         [checked]="isSeveritySelected('debug')"

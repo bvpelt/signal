@@ -1,7 +1,7 @@
 import { Card } from '../data/card';
 import { Order } from '../data/order';
 import { computed, inject } from '@angular/core';
-import { patchState, withState, signalStore, withMethods } from '@ngrx/signals';
+import { patchState, withState, signalStore, withMethods, withComputed } from '@ngrx/signals';
 import { CardsService } from '../services/cards.service';
 import { OrdersService } from '../services/orders.service';
 import { LoggerService } from '../services/logger.service';
@@ -21,6 +21,17 @@ const initialState: DataState = {
 export const DataStore = signalStore(
   { providedIn: 'root' },
   withState(initialState), // initial state
+  withComputed((store) => ({
+    // Sorted cards computed signal
+    sortedCards: computed(() => {
+      return [...store.cards()].sort((a, b) => 
+        a.title.localeCompare(b.title)
+      );
+    }),
+    // You can add more computed properties
+    cardCount: computed(() => store.cards().length),
+    orderCount: computed(() => store.orders().length),
+  })),
   withMethods((store) => {
     const cardService = inject(CardsService);
     const orderService = inject(OrdersService);
