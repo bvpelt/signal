@@ -1,0 +1,20 @@
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.category {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  
+  div {
+    // Optional: add some styling
+    &:first-child {
+      font-weight: bold;
+      min-width: 50px; // Optional: ensure consistent spacing
+    }
+  }
+}

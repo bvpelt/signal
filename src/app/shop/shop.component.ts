@@ -1,14 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Card } from '../data/card';
-import { CardsService } from '../services/cards.service';
 import { DataStore } from '../store/data.store';
 import { OrdersService } from '../services/orders.service';
 import { OrdercardComponent } from '../ordercard/ordercard.component';
+import { CatagoryComponent } from '../catagory/catagory.component';
 import { LoggerService } from '../services/logger.service';
 
 @Component({
   selector: 'app-shop',
-  imports: [OrdercardComponent],
+  imports: [OrdercardComponent, CatagoryComponent],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
 })

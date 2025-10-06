@@ -1,7 +1,5 @@
 import { Component, signal, computed, effect } from '@angular/core';
 
-import { filter } from 'rxjs';
-
 @Component({
   selector: 'app-shome',
   imports: [],
@@ -17,10 +15,10 @@ export class ShomeComponent {
 
   constructor() {
     effect(() => {
-      console.log('Effect due to counter change:', this.scounter());
+      // console.log('Effect due to counter change:', this.scounter());
     });
     effect(() => {
-      console.log('Effect due to colors change:', this.colors());
+      // console.log('Effect due to colors change:', this.colors());
     });
   }
 

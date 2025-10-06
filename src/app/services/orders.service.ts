@@ -79,7 +79,7 @@ export class OrdersService {
       this.orders.update((orders) =>
         orders.filter((order) => order.id !== existingOrder.id),
       );
-       this.loggerservice.warning(
+      this.loggerservice.warning(
         'OrdersService',
         `Order for customer ${customerId} and card ${card.id} removed`,
       );

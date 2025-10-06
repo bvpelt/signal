@@ -1,10 +1,17 @@
 import { Card } from './card';
+import { Catagory } from './catagory';
+
+export const CATAGORIES: Catagory[] = [
+  { id: 1, name: 'Fruits' },
+  { id: 2, name: 'Vegetables' },
+];
 
 export const CARDS: Card[] = [
   {
     id: 1,
     title: 'Apple',
-    image: 'apple-180.jpg',
+    catagoryId: 1,
+    image: 'apple-180.png',
     description: 'Fresh red apple',
     price: 1.2,
     quantity: 0,
@@ -12,6 +19,7 @@ export const CARDS: Card[] = [
   {
     id: 2,
     title: 'Orange',
+    catagoryId: 1,
     image: 'orange-180.jpeg',
     description: 'Fresh orange',
     price: 1.5,
@@ -20,41 +28,64 @@ export const CARDS: Card[] = [
   {
     id: 3,
     title: 'Grapes',
+    catagoryId: 1,
     image: 'grapes-180.jpg',
     description: 'Blue grapes',
     price: 2.5,
     quantity: 0,
   },
-   {
+  {
     id: 4,
     title: 'Peers',
+    catagoryId: 1,
     image: 'pear.jpg',
     description: 'Peers',
     price: 1.25,
     quantity: 0,
   },
-   {
+  {
     id: 5,
     title: 'Banana',
-    image: 'banana.jpg',
+    catagoryId: 1,
+    image: 'banana.png',
     description: 'Bananas',
     price: 2.5,
     quantity: 0,
   },
-     {
+  {
     id: 6,
     title: 'Blueberry',
+    catagoryId: 1,
     image: 'blueberry.png',
     description: 'Blueberries',
     price: 2.5,
     quantity: 0,
   },
-     {
+  {
     id: 7,
     title: 'Strawberry',
+    catagoryId: 1,
     image: 'strawberry.png',
     description: 'Strawberries',
     price: 2.5,
+    quantity: 0,
+  },
+  {
+    id: 8,
+    title: 'Blackberry',
+    catagoryId: 1,
+    image: 'blackberry-180.jpg',
+    description: 'Blackberries',
+    price: 1.23,
+    quantity: 0,
+  },
+  {
+    id: 9,
+    title: 'Raspberry',
+    catagoryId: 1,
+    image: 'raspberry.jpg',
+    description: 'Raspberries',
+    price: 2.65,
     quantity: 0,
   },
 ];

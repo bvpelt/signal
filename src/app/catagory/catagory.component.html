@@ -1,0 +1,24 @@
+<h2>Number of categories: {{ dataStore.categoryCount() }}</h2>
+
+@if (dataStore.loadingCategories()) {
+  <div>
+    <p>Loading...</p>
+  </div>
+}
+
+<div class="categories">
+  @for (
+    category of dataStore.categories();
+    track category.id;
+    let index = $index
+  ) {
+    <div class="category">
+      <div style="font-weight: bold">
+        {{ category.id }}
+      </div>
+      <div>
+        {{ category.name }}
+      </div>
+    </div>
+  }
+</div>

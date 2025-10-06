@@ -11,22 +11,22 @@
       </tr>
     </thead>
     <tbody>
-      @for(order of dataStore.orders(); track order.id) {
-      <tr>
-        <td>{{ order.id }}</td>
-        <td>{{ order.artikelid }}</td>
-        <td>{{ order.description }}</td>
-        <td>{{ order.quantity }}</td>
-        <td>{{ order.price | currency : "EUR" }}</td>
-        <td>{{ order.quantity * order.price | currency : "EUR" }}</td>
-      </tr>
+      @for (order of dataStore.sortedOrders(); track order.id) {
+        <tr>
+          <td>{{ order.id }}</td>
+          <td>{{ order.artikelid }}</td>
+          <td>{{ order.description }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>{{ order.price | currency: "EUR" }}</td>
+          <td>{{ order.quantity * order.price | currency: "EUR" }}</td>
+        </tr>
       }
     </tbody>
     <tfoot>
       <tr>
         <td colspan="5" style="text-align: right; font-weight: bold"></td>
         <td style="text-align: right; font-weight: bold">
-          {{ getTotalPrice() | currency : "EUR" }}
+          {{ getTotalPrice() | currency: "EUR" }}
         </td>
       </tr>
     </tfoot>
