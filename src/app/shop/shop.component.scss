@@ -18,6 +18,13 @@
   border-radius: 5px;
   width: 240px;
   height: 250px;
+  background-color: white;
+  transition: background-color 0.3s ease; // Smooth transition
+  
+  &.ordered {
+    background-color: #90EE90; // Light green
+    border-color: #228B22; // Darker green border
+  }
 }
 
 .card .image {

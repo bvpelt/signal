@@ -9,7 +9,7 @@
 
 <div class="cards">
   @for (card of dataStore.sortedCards(); track card.id; let index = $index) {
-    <div class="card">
+    <div class="card" [class.ordered]="getOrderedQuantity(card.id) > 0">
       <div style="font-weight: bold">
         {{ card.title }}
       </div>
