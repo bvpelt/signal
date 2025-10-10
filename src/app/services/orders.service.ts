@@ -47,6 +47,7 @@ export class OrdersService {
         id: this.nextOrderId(),
         customerid: customerId,
         artikelid: card.id,
+        categoryid: card.catagoryId,
         description: card.title,
         quantity: 1,
         price: card.price,

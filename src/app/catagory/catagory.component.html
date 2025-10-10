@@ -1,24 +1,33 @@
 <h2>Number of categories: {{ dataStore.categoryCount() }}</h2>
 
-@if (dataStore.loadingCategories()) {
-  <div>
-    <p>Loading...</p>
-  </div>
-}
+<div class="category-filter">
+  <h2>Categories ({{ dataStore.categoryCount() }})</h2>
 
-<div class="categories">
-  @for (
-    category of dataStore.categories();
-    track category.id;
-    let index = $index
-  ) {
-    <div class="category">
-      <div style="font-weight: bold">
-        {{ category.id }}
-      </div>
-      <div>
-        {{ category.name }}
-      </div>
+  @if (dataStore.loadingCategories()) {
+    <div>
+      <p>Loading...</p>
     </div>
   }
+
+  <div class="categories">
+    <!-- "All" category button -->
+    <div
+      class="category"
+      [class.selected]="isSelected(null)"
+      (click)="selectCategory(null)"
+    >
+      <div class="category-name">Show All Products</div>
+    </div>
+
+    <!-- Individual category buttons -->
+    @for (category of dataStore.categories(); track category.id) {
+      <div
+        class="category"
+        [class.selected]="isSelected(category.id)"
+        (click)="selectCategory(category.id)"
+      >
+        <div class="category-name">{{ category.name }}</div>
+      </div>
+    }
+  </div>
 </div>

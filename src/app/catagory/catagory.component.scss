@@ -1,7 +1,19 @@
+:host {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.category-filter {
+  h2 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+  }
+}
+
 .categories {
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
@@ -9,12 +21,49 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  
-  div {
-    // Optional: add some styling
-    &:first-child {
-      font-weight: bold;
-      min-width: 50px; // Optional: ensure consistent spacing
+  padding: 12px 20px;
+  border: 2px solid #dee2e6;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &.selected {
+    background-color: #c3dbf1; // Changed to your color
+    border-color: #7ba8d1; // Darker shade for border
+    color: #2c3e50; // Dark text for better contrast
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(123, 168, 209, 0.3);
+
+    &:hover {
+      background-color: #b0cee6; // Slightly darker on hover
+      border-color: #6a98c1;
     }
+
+    .category-id,
+    .category-name {
+      color: #2c3e50; // Dark text instead of white
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .category-id {
+    font-weight: bold;
+    min-width: 30px;
+    color: #495057;
+  }
+
+  .category-name {
+    color: #6c757d;
   }
 }

@@ -4,6 +4,7 @@
       <tr>
         <th>ID</th>
         <th>Artikel ID</th>
+        <th>Category ID</th>
         <th>Description</th>
         <th>Quantity</th>
         <th>Price</th>
@@ -15,6 +16,7 @@
         <tr>
           <td>{{ order.id }}</td>
           <td>{{ order.artikelid }}</td>
+          <td>{{ order.categoryid }}</td>
           <td>{{ order.description }}</td>
           <td>{{ order.quantity }}</td>
           <td>{{ order.price | currency: "EUR" }}</td>
@@ -24,8 +26,10 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="5" style="text-align: right; font-weight: bold"></td>
-        <td style="text-align: right; font-weight: bold">
+        <td colspan="6" style="text-align: right; font-weight: bold">
+          Grand total:
+        </td>
+        <td style="text-align: left; font-weight: bold">
           {{ getTotalPrice() | currency: "EUR" }}
         </td>
       </tr>
