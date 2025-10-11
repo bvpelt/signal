@@ -42,37 +42,37 @@ export const DataStore = signalStore(
     const sortedCards = computed(() => {
       const selectedCategoryId = store.selectedCategoryId();
       let cards = [...store.cards()];
-
+      
       // Filter by category if one is selected
       if (selectedCategoryId !== null) {
-        cards = cards.filter((card) => card.catagoryId === selectedCategoryId);
+        cards = cards.filter(card => card.catagoryId === selectedCategoryId);
       }
-
+      
       // Sort by title
       return cards.sort((a, b) => a.title.localeCompare(b.title));
     });
 
     return {
       sortedCards,
-
+      
       // Sorted orders computed signal
       sortedOrders: computed(() => {
         return [...store.orders()].sort((a, b) =>
           a.description.localeCompare(b.description),
         );
       }),
-
+      
       // Computed counts - now can reference sortedCards
       cardCount: computed(() => sortedCards().length), // Count filtered cards
       totalCardCount: computed(() => store.cards().length), // Total cards
       categoryCount: computed(() => store.categories().length),
       orderCount: computed(() => store.orders().length),
-
+      
       // Get category name for selected category
       selectedCategoryName: computed(() => {
         const selectedId = store.selectedCategoryId();
         if (selectedId === null) return 'All';
-        const category = store.categories().find((c) => c.id === selectedId);
+        const category = store.categories().find(c => c.id === selectedId);
         return category?.name ?? 'Unknown';
       }),
     };
@@ -89,12 +89,9 @@ export const DataStore = signalStore(
         patchState(store, { loadingCategories: true });
         const categories = await catagoryService.getCategories();
         patchState(store, { categories, loadingCategories: false });
-        loggerService.info(
-          'DataStore',
-          `Loaded ${categories.length} categories`,
-        );
+        loggerService.info('DataStore', `Loaded ${categories.length} categories`);
       },
-
+      
       async loadAllCards(): Promise<void> {
         loggerService.debug('DataStore', 'Loading all cards');
         patchState(store, { loadingCards: true });
@@ -102,7 +99,7 @@ export const DataStore = signalStore(
         patchState(store, { cards, loadingCards: false });
         loggerService.info('DataStore', `Loaded ${cards.length} cards`);
       },
-
+      
       async loadAllOrders(): Promise<void> {
         loggerService.debug('DataStore', 'Loading all orders');
         patchState(store, { loadingOrders: true });
@@ -110,22 +107,19 @@ export const DataStore = signalStore(
         patchState(store, { orders, loadingOrders: false });
         loggerService.info('DataStore', `Loaded ${orders.length} orders`);
       },
-
+      
       // Set selected category filter
       selectCategory(categoryId: number | null): void {
-        loggerService.debug(
-          'DataStore',
-          `Selecting category: ${categoryId ?? 'All'}`,
-        );
+        loggerService.debug('DataStore', `Selecting category: ${categoryId ?? 'All'}`);
         patchState(store, { selectedCategoryId: categoryId });
       },
-
+      
       // Clear category filter (show all)
       clearCategoryFilter(): void {
         loggerService.debug('DataStore', 'Clearing category filter');
         patchState(store, { selectedCategoryId: null });
       },
-
+      
       async addToShoppingCard(card: Card): Promise<void> {
         loggerService.debug(
           'DataStore',
@@ -135,7 +129,7 @@ export const DataStore = signalStore(
         const orders = await orderService.addCardToOrder(customer, card);
         patchState(store, { orders: orders() });
       },
-
+      
       async removeCardFromOrder(card: Card): Promise<void> {
         loggerService.debug(
           'DataStore',
@@ -147,6 +141,20 @@ export const DataStore = signalStore(
         // Fetch updated orders from the service
         const orders = await orderService.getOrders();
         patchState(store, { orders });
+      },
+      
+      // Update card data
+      async updateCard(card: Card): Promise<void> {
+        loggerService.debug('DataStore', `Updating card: ${card.title}`);
+        patchState(store, { loadingCards: true });
+        
+        // Update the card in the service
+        await cardService.updateCard(card);
+        
+        // Reload all cards to get the updated data
+        const cards = await cardService.getCards();
+        patchState(store, { cards, loadingCards: false });
+        loggerService.info('DataStore', `Card updated: ${card.title}`);
       },
     };
   }),

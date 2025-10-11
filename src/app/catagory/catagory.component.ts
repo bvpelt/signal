@@ -36,6 +36,11 @@ export class CatagoryComponent implements OnInit {
       'CatagoryComponent',
       `Selected category: ${categoryName}`,
     );
+
+    this.loggerService.info(
+      'CatagoryComponent',
+      `cards: ${JSON.stringify(this.dataStore.cards())}`,
+    );
   }
 
   isSelected(categoryId: number | null): boolean {

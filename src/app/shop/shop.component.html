@@ -10,18 +10,88 @@
 <div class="cards">
   @for (card of dataStore.sortedCards(); track card.id; let index = $index) {
     <div class="card" [class.ordered]="getOrderedQuantity(card.id) > 0">
-      <div style="font-weight: bold">
-        {{ card.title }}
-      </div>
-      <div class="image">
-        <img src="{{ card.image }}" width="170" height="180" />
-      </div>
-      <div>price : {{ card.price }}</div>
-      <div>ordered: {{ getOrderedQuantity(card.id) }}</div>
-      <div class="buttons">
-        <button (click)="addToShoppingCard(card)">Add +</button>
-        <button (click)="removeCardFromOrder(card)">Remove -</button>
-      </div>
+      @if (editingCardId() === card.id) {
+        <!-- Edit Mode -->
+        <div class="edit-form">
+          <h3>Edit Product</h3>
+
+          <div class="form-group">
+            <label>Title:</label>
+            <input
+              type="text"
+              [(ngModel)]="editForm.title"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Description:</label>
+            <input
+              type="text"
+              [(ngModel)]="editForm.description"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Category:</label>
+            <select [(ngModel)]="editForm.catagoryId" class="form-control">
+              @for (category of dataStore.categories(); track category.id) {
+                <option [value]="category.id">{{ category.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Price:</label>
+            <input
+              type="number"
+              [(ngModel)]="editForm.price"
+              step="0.01"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Image URL:</label>
+            <input
+              type="text"
+              [(ngModel)]="editForm.image"
+              class="form-control"
+            />
+          </div>
+
+          <div class="edit-buttons">
+            <button class="btn-save" (click)="saveCard()">Save</button>
+            <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
+          </div>
+        </div>
+      } @else {
+        <!-- View Mode -->
+        <div class="card-header">
+          <div class="card-title">{{ card.title }}</div>
+          <button class="btn-edit-icon" (click)="startEdit(card)">✏️</button>
+        </div>
+
+        <div class="image">
+          <img [src]="card.image" width="170" height="180" [alt]="card.title" />
+        </div>
+
+        <div class="card-description">{{ card.description }}</div>
+        <div class="card-price">Price: ${{ card.price.toFixed(2) }}</div>
+        <div class="card-ordered">
+          Ordered: {{ getOrderedQuantity(card.id) }}
+        </div>
+
+        <div class="buttons">
+          <button class="btn-add" (click)="addToShoppingCard(card)">
+            Add +
+          </button>
+          <button class="btn-remove" (click)="removeCardFromOrder(card)">
+            Remove -
+          </button>
+        </div>
+      }
     </div>
   }
 </div>

@@ -2,51 +2,313 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 20px;
+}
+
+h2 {
+  color: #2c3e50;
+  margin: 0 0 20px 0;
 }
 
 .cards {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .card {
-  border: 1px solid black;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 5px;
+  border: 1px solid #dee2e6;
+  padding: 15px;
+  border-radius: 8px;
   width: 240px;
-  height: 250px;
+  min-height: 400px;
   background-color: white;
-  transition: background-color 0.3s ease; // Smooth transition
-  
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
   &.ordered {
-    background-color: #90EE90; // Light green
-    border-color: #228B22; // Darker green border
+    background-color: #d4edda;
+    border-color: #28a745;
+    border-width: 2px;
+
+    .card-title {
+      color: #155724;
+    }
   }
 }
 
-.card .image {
+// Card Header with Edit Button
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #2c3e50;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.btn-edit-icon {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 4px;
+  margin: 0;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &:active {
+    transform: scale(1.1);
+  }
+}
+
+// Image Section
+.image {
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10px 0;
+  height: 180px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
 }
 
-.ordercard {
-  border: 1px solid black;
-  padding: 10px;
-  border-radius: 5px;
-  height: fit-content;
-  width: 98%;
-  align-self: flex-start;
+// Card Info
+.card-description {
+  color: #6c757d;
+  font-size: 0.9em;
+  margin-bottom: 8px;
+  min-height: 2.5em;
+  line-height: 1.4;
 }
 
+.card-price {
+  font-weight: 600;
+  color: #28a745;
+  margin-bottom: 5px;
+  font-size: 1em;
+}
+
+.card-ordered {
+  color: #495057;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+
+// Action Buttons
 .buttons {
-  margin: 0px;
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+
+  button {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+
+    &.btn-add {
+      background-color: #28a745;
+      color: white;
+
+      &:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+      }
+    }
+
+    &.btn-remove {
+      background-color: #dc3545;
+      color: white;
+
+      &:hover {
+        background-color: #c82333;
+        transform: scale(1.05);
+      }
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 }
 
-button {
-  margin: 0 5px 0 0;
+// Edit Form Styles
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 1.1em;
+    text-align: center;
+  }
+}
+
+.form-group {
+  margin-bottom: 12px;
+
+  label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.85em;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.9em;
+    box-sizing: border-box;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    &:hover {
+      border-color: #adb5bd;
+    }
+  }
+
+  select.form-control {
+    cursor: pointer;
+    background-color: white;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 30px;
+
+    &:hover {
+      border-color: #007bff;
+    }
+  }
+
+  input[type="number"] {
+    width: 100%;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    &::placeholder {
+      color: #adb5bd;
+    }
+  }
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 10px;
+
+  button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+
+    &.btn-save {
+      background-color: #007bff;
+      color: white;
+
+      &:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
+    }
+
+    &.btn-cancel {
+      background-color: #6c757d;
+      color: white;
+
+      &:hover {
+        background-color: #5a6268;
+        transform: scale(1.05);
+      }
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+// Order Card Section
+.ordercard {
+  border: 1px solid #dee2e6;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+// Loading State
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  :host {
+    padding: 10px;
+  }
+
+  .cards {
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 300px;
+  }
 }
