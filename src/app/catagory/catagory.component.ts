@@ -32,7 +32,7 @@ export class CatagoryComponent implements OnInit {
         : (this.dataStore.categories().find((c) => c.id === categoryId)?.name ??
           'Unknown');
 
-    this.loggerService.info(
+    this.loggerService.debug(
       'CatagoryComponent',
       `User selected category: ${categoryName} (ID: ${categoryId})`,
     );
