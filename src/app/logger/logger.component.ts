@@ -24,7 +24,7 @@ export class LoggerComponent {
 
   // Track which severities are selected
   selectedSeverities = signal<Set<Severity>>(
-    new Set(['debug', 'info', 'warning', 'error']),
+    new Set(['trace', 'debug', 'info', 'warning', 'error']),
   );
 
   // Computed filtered log messages
@@ -54,12 +54,24 @@ export class LoggerComponent {
   }
 
   isAllSelected(): boolean {
-    const allSeverities: Severity[] = ['debug', 'info', 'warning', 'error'];
+    const allSeverities: Severity[] = [
+      'trace',
+      'debug',
+      'info',
+      'warning',
+      'error',
+    ];
     return this.selectedSeverities().size === allSeverities.length;
   }
 
   toggleAll(): void {
-    const allSeverities: Severity[] = ['debug', 'info', 'warning', 'error'];
+    const allSeverities: Severity[] = [
+      'trace',
+      'debug',
+      'info',
+      'warning',
+      'error',
+    ];
     this.selectedSeverities.update((current) => {
       if (current.size === allSeverities.length) {
         return new Set<Severity>();

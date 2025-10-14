@@ -16,6 +16,15 @@
       font-weight: 600;
     }
 
+    &.severity-trace {
+      border-left-color: #343d44;
+      color: rgb(1, 10, 19);
+
+      strong {
+        color: rgb(1, 10, 19);
+      }
+    }
+
     &.severity-debug {
       border-left-color: #6c757d;
       color: rgb(1, 10, 19);

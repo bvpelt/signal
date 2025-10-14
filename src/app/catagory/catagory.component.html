@@ -1,5 +1,3 @@
-<h2>Number of categories: {{ dataStore.categoryCount() }}</h2>
-
 <div class="category-filter">
   <h2>Categories ({{ dataStore.categoryCount() }})</h2>
 
@@ -16,7 +14,9 @@
       [class.selected]="isSelected(null)"
       (click)="selectCategory(null)"
     >
-      <div class="category-name">Show All Products</div>
+      <div class="category-name">
+        Show All Products ({{ dataStore.totalCardCount() }})
+      </div>
     </div>
 
     <!-- Individual category buttons -->

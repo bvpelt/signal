@@ -13,17 +13,13 @@ export class CardsService {
     this.loggerService.debug('CardsService', 'CardsService initialized');
   }
 
-  // Get all cards
   async getCards(): Promise<Card[]> {
     await this.delay(100);
-    this.loggerService.debug(
-      'CardsService',
-      `Retrieved ${this.cards().length} cards`,
-    );
-    return [...this.cards()];
+    const cards = [...this.cards()];
+    this.loggerService.debug('CardsService', `Retrieved ${cards.length} cards`);
+    return cards;
   }
 
-  // Update an existing card
   async updateCard(updatedCard: Card): Promise<void> {
     await this.delay(100);
 
@@ -37,9 +33,15 @@ export class CardsService {
       'CardsService',
       `Updated card: ${updatedCard.title} (ID: ${updatedCard.id}, Category: ${updatedCard.catagoryId})`,
     );
+
+    // Verify the update
+    const verifyCard = this.cards().find((c) => c.id === updatedCard.id);
+    this.loggerService.debug(
+      'CardsService',
+      `Verified in service - Card ${verifyCard?.id} now has category: ${verifyCard?.catagoryId}`,
+    );
   }
 
-  // Add a new card
   async addCard(newCard: Omit<Card, 'id'>): Promise<Card> {
     await this.delay(100);
 
@@ -55,7 +57,6 @@ export class CardsService {
     return card;
   }
 
-  // Delete a card
   async deleteCard(cardId: number): Promise<void> {
     await this.delay(100);
 
@@ -69,7 +70,6 @@ export class CardsService {
     );
   }
 
-  // Search cards by title
   async searchCards(searchTerm: string): Promise<Card[]> {
     await this.delay(50);
     const term = searchTerm.toLowerCase();

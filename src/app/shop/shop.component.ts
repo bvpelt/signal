@@ -56,8 +56,8 @@ export class ShopComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.dataStore.loadAllCards();
     this.dataStore.loadAllCategories();
+    this.dataStore.loadAllCards();
     this.loggerService.info('ShopComponent', 'Shop component initialized');
   }
 
@@ -91,10 +91,6 @@ export class ShopComponent implements OnInit {
       image: card.image,
       catagoryId: card.catagoryId,
     };
-    this.loggerService.debug(
-      'ShopComponent',
-      `Started editing card: ${card.title}`,
-    );
   }
 
   cancelEdit(): void {
@@ -107,11 +103,6 @@ export class ShopComponent implements OnInit {
     if (cardId === null) return;
 
     const originalCard = this.dataStore.cards().find((c) => c.id === cardId);
-    this.loggerService.info(
-      'ShopComponent',
-      'Original Card: ' + JSON.stringify(originalCard),
-    );
-
     if (!originalCard) return;
 
     const updatedCard: Card = {
@@ -120,23 +111,22 @@ export class ShopComponent implements OnInit {
       description: this.editForm.description,
       price: this.editForm.price,
       image: this.editForm.image,
-      catagoryId: this.editForm.catagoryId,
+      catagoryId: Number(this.editForm.catagoryId),
       quantity: originalCard.quantity,
     };
-    this.loggerService.info(
-      'ShopComponent',
-      'Updated Card: ' + JSON.stringify(updatedCard),
-    );
 
+    // Update the card
     await this.dataStore.updateCard(updatedCard);
+
+    // Close edit mode
     this.editingCardId.set(null);
 
     const categoryName =
       this.dataStore.categories().find((c) => c.id === updatedCard.catagoryId)
         ?.name ?? 'Unknown';
-    this.loggerService.info(
-      'ShopComponent',
-      `Updated card: ${updatedCard.title} (Category: ${categoryName})`,
-    );
+
+    const category = this.dataStore
+      .categories()
+      .find((c) => c.id === updatedCard.catagoryId);
   }
 }

@@ -2,13 +2,13 @@
 <h2>Number of products: {{ dataStore.cardCount() }}</h2>
 
 @if (dataStore.loadingCards()) {
-  <div>
+  <div class="loading">
     <p>Loading...</p>
   </div>
 }
 
 <div class="cards">
-  @for (card of dataStore.sortedCards(); track card.id; let index = $index) {
+  @for (card of dataStore.sortedCards(); track card.id) {
     <div class="card" [class.ordered]="getOrderedQuantity(card.id) > 0">
       @if (editingCardId() === card.id) {
         <!-- Edit Mode -->

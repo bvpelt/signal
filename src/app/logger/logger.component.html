@@ -13,6 +13,15 @@
     </label>
     <label>
       <input
+        id="trace"
+        type="checkbox"
+        [checked]="isSeveritySelected('trace')"
+        (change)="toggleSeverity('trace')"
+      />
+      Trace
+    </label>
+    <label>
+      <input
         id="debug"
         type="checkbox"
         [checked]="isSeveritySelected('debug')"
@@ -29,7 +38,6 @@
       />
       Info
     </label>
-
     <label>
       <input
         id="warning"
@@ -39,7 +47,6 @@
       />
       Warning
     </label>
-
     <label>
       <input
         id="error"
@@ -59,6 +66,7 @@
       <ul>
         @for (log of logMessages(); track log) {
           <li
+            [class.severity-trace]="log.severity === 'trace'"
             [class.severity-debug]="log.severity === 'debug'"
             [class.severity-info]="log.severity === 'info'"
             [class.severity-warning]="log.severity === 'warning'"

@@ -25,6 +25,10 @@ export class LoggerService {
   }
 
   // Convenience methods for different severity levels
+  trace(module: string, message: string): void {
+    this.log(module, message, 'trace');
+  }
+
   debug(module: string, message: string): void {
     this.log(module, message, 'debug');
   }
