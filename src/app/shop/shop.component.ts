@@ -28,8 +28,10 @@ export class ShopComponent implements OnInit {
 
   customerId = 1;
 
-  // Edit state
+  // Edit/Add state - null means not editing, -1 means adding new card
   editingCardId = signal<number | null>(null);
+  isAddingNew = computed(() => this.editingCardId() === -1);
+
   editForm: {
     title: string;
     description: string;
@@ -55,9 +57,9 @@ export class ShopComponent implements OnInit {
     return quantities;
   });
 
-  ngOnInit(): void {
-    this.dataStore.loadAllCategories();
-    this.dataStore.loadAllCards();
+  async ngOnInit(): Promise<void> {
+    await this.dataStore.loadAllCategories();
+    await this.dataStore.loadAllCards();
     this.loggerService.info('ShopComponent', 'Shop component initialized');
   }
 
@@ -81,7 +83,20 @@ export class ShopComponent implements OnInit {
     return this.orderedQuantities().get(cardId) ?? 0;
   }
 
-  // Edit functionality
+  // Start adding a new card
+  startAddNew(): void {
+    this.editingCardId.set(-1); // -1 indicates adding new
+    this.editForm = {
+      title: '',
+      description: '',
+      price: 0,
+      image: '',
+      catagoryId: this.dataStore.categories()[0]?.id ?? 1, // Default to first category
+    };
+    this.loggerService.debug('ShopComponent', 'Started adding new card');
+  }
+
+  // Start editing an existing card
   startEdit(card: Card): void {
     this.editingCardId.set(card.id);
     this.editForm = {
@@ -91,42 +106,112 @@ export class ShopComponent implements OnInit {
       image: card.image,
       catagoryId: card.catagoryId,
     };
+
+    const categoryName =
+      this.dataStore.categories().find((c) => c.id === card.catagoryId)?.name ??
+      'Unknown';
+
+    this.loggerService.debug(
+      'ShopComponent',
+      `Started editing card: ${card.title} (Category: ${categoryName})`,
+    );
   }
 
   cancelEdit(): void {
     this.editingCardId.set(null);
-    this.loggerService.debug('ShopComponent', 'Cancelled editing');
+    this.loggerService.debug('ShopComponent', 'Cancelled editing/adding');
   }
 
   async saveCard(): Promise<void> {
     const cardId = this.editingCardId();
     if (cardId === null) return;
 
+    // Validate form
+    if (!this.editForm.title.trim()) {
+      this.loggerService.warning('ShopComponent', 'Title is required');
+      return;
+    }
+
+    if (this.editForm.price < 0) {
+      this.loggerService.warning('ShopComponent', 'Price cannot be negative');
+      return;
+    }
+
+    if (cardId === -1) {
+      // Adding new card
+      await this.addNewCard();
+    } else {
+      // Updating existing card
+      await this.updateExistingCard(cardId);
+    }
+  }
+
+  private async addNewCard(): Promise<void> {
+    const newCard: Omit<Card, 'id'> = {
+      title: this.editForm.title.trim(),
+      description: this.editForm.description.trim(),
+      price: this.editForm.price,
+      image: this.editForm.image.trim(),
+      catagoryId: Number(this.editForm.catagoryId),
+      quantity: 0,
+    };
+
+    try {
+      const addedCard = await this.dataStore.addCard(newCard);
+
+      this.editingCardId.set(null);
+
+      const categoryName =
+        this.dataStore.categories().find((c) => c.id === addedCard.catagoryId)
+          ?.name ?? 'Unknown';
+
+      this.loggerService.info(
+        'ShopComponent',
+        `Added new card: ${addedCard.title} (Category: ${categoryName})`,
+      );
+    } catch (error) {
+      this.loggerService.error('ShopComponent', `Failed to add card: ${error}`);
+    }
+  }
+
+  private async updateExistingCard(cardId: number): Promise<void> {
     const originalCard = this.dataStore.cards().find((c) => c.id === cardId);
-    if (!originalCard) return;
+    if (!originalCard) {
+      this.loggerService.warning(
+        'ShopComponent',
+        `Card with ID ${cardId} not found`,
+      );
+      return;
+    }
 
     const updatedCard: Card = {
       id: cardId,
-      title: this.editForm.title,
-      description: this.editForm.description,
+      title: this.editForm.title.trim(),
+      description: this.editForm.description.trim(),
       price: this.editForm.price,
-      image: this.editForm.image,
+      image: this.editForm.image.trim(),
       catagoryId: Number(this.editForm.catagoryId),
       quantity: originalCard.quantity,
     };
 
-    // Update the card
-    await this.dataStore.updateCard(updatedCard);
+    try {
+      await this.dataStore.updateCard(updatedCard);
 
-    // Close edit mode
-    this.editingCardId.set(null);
+      this.editingCardId.set(null);
 
-    const categoryName =
-      this.dataStore.categories().find((c) => c.id === updatedCard.catagoryId)
-        ?.name ?? 'Unknown';
+      const categoryName =
+        this.dataStore.categories().find((c) => c.id === updatedCard.catagoryId)
+          ?.name ?? 'Unknown';
 
-    const category = this.dataStore
-      .categories()
-      .find((c) => c.id === updatedCard.catagoryId);
+      this.loggerService.info(
+        'ShopComponent',
+        `Updated card: ${updatedCard.title} (Category: ${categoryName})`,
+      );
+    } catch (error) {
+      this.loggerService.error(
+        'ShopComponent',
+        `Failed to update card: ${error}`,
+      );
+    }
   }
 }
