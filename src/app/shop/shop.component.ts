@@ -6,18 +6,21 @@ import {
   computed,
   signal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Card } from '../data/card';
 import { DataStore } from '../store/data.store';
 import { OrdersService } from '../services/orders.service';
 import { OrdercardComponent } from '../ordercard/ordercard.component';
 import { CatagoryComponent } from '../catagory/catagory.component';
 import { LoggerService } from '../services/logger.service';
+import {
+  EditCardComponent,
+  CardFormData,
+} from '../edit-card/edit-card.component';
 
 @Component({
   selector: 'app-shop',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [OrdercardComponent, CatagoryComponent, FormsModule],
+  imports: [OrdercardComponent, CatagoryComponent, EditCardComponent],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.scss',
 })
@@ -28,23 +31,16 @@ export class ShopComponent implements OnInit {
 
   customerId = 1;
 
-  // Edit/Add state - null means not editing, -1 means adding new card
+  // Edit/Add state
   editingCardId = signal<number | null>(null);
   isAddingNew = computed(() => this.editingCardId() === -1);
 
-  editForm: {
-    title: string;
-    description: string;
-    price: number;
-    image: string;
-    catagoryId: number;
-  } = {
-    title: '',
-    description: '',
-    price: 0,
-    image: '',
-    catagoryId: 1,
-  };
+  // Get the card being edited
+  editingCard = computed(() => {
+    const cardId = this.editingCardId();
+    if (cardId === null || cardId === -1) return null;
+    return this.dataStore.cards().find((c) => c.id === cardId) ?? null;
+  });
 
   // Computed map for better performance
   orderedQuantities = computed(() => {
@@ -85,28 +81,13 @@ export class ShopComponent implements OnInit {
 
   // Start adding a new card
   startAddNew(): void {
-    this.editingCardId.set(-1); // -1 indicates adding new
-    this.editForm = {
-      title: '',
-      description: '',
-      price: 0,
-      image: '',
-      catagoryId: this.dataStore.categories()[0]?.id ?? 1, // Default to first category
-    };
+    this.editingCardId.set(-1);
     this.loggerService.debug('ShopComponent', 'Started adding new card');
   }
 
   // Start editing an existing card
   startEdit(card: Card): void {
     this.editingCardId.set(card.id);
-    this.editForm = {
-      title: card.title,
-      description: card.description,
-      price: card.price,
-      image: card.image,
-      catagoryId: card.catagoryId,
-    };
-
     const categoryName =
       this.dataStore.categories().find((c) => c.id === card.catagoryId)?.name ??
       'Unknown';
@@ -117,42 +98,27 @@ export class ShopComponent implements OnInit {
     );
   }
 
+  // Cancel editing/adding
   cancelEdit(): void {
     this.editingCardId.set(null);
     this.loggerService.debug('ShopComponent', 'Cancelled editing/adding');
   }
 
-  async saveCard(): Promise<void> {
+  // Handle save from EditCardComponent
+  async onSaveCard(formData: CardFormData): Promise<void> {
     const cardId = this.editingCardId();
     if (cardId === null) return;
 
-    // Validate form
-    if (!this.editForm.title.trim()) {
-      this.loggerService.warning('ShopComponent', 'Title is required');
-      return;
-    }
-
-    if (this.editForm.price < 0) {
-      this.loggerService.warning('ShopComponent', 'Price cannot be negative');
-      return;
-    }
-
     if (cardId === -1) {
-      // Adding new card
-      await this.addNewCard();
+      await this.addNewCard(formData);
     } else {
-      // Updating existing card
-      await this.updateExistingCard(cardId);
+      await this.updateExistingCard(cardId, formData);
     }
   }
 
-  private async addNewCard(): Promise<void> {
+  private async addNewCard(formData: CardFormData): Promise<void> {
     const newCard: Omit<Card, 'id'> = {
-      title: this.editForm.title.trim(),
-      description: this.editForm.description.trim(),
-      price: this.editForm.price,
-      image: this.editForm.image.trim(),
-      catagoryId: Number(this.editForm.catagoryId),
+      ...formData,
       quantity: 0,
     };
 
@@ -174,7 +140,10 @@ export class ShopComponent implements OnInit {
     }
   }
 
-  private async updateExistingCard(cardId: number): Promise<void> {
+  private async updateExistingCard(
+    cardId: number,
+    formData: CardFormData,
+  ): Promise<void> {
     const originalCard = this.dataStore.cards().find((c) => c.id === cardId);
     if (!originalCard) {
       this.loggerService.warning(
@@ -186,11 +155,7 @@ export class ShopComponent implements OnInit {
 
     const updatedCard: Card = {
       id: cardId,
-      title: this.editForm.title.trim(),
-      description: this.editForm.description.trim(),
-      price: this.editForm.price,
-      image: this.editForm.image.trim(),
-      catagoryId: Number(this.editForm.catagoryId),
+      ...formData,
       quantity: originalCard.quantity,
     };
 

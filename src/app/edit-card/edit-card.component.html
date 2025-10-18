@@ -1,0 +1,69 @@
+<div class="edit-form">
+  <h3>{{ formTitle() }}</h3>
+
+  <div class="form-group">
+    <label>Title: *</label>
+    <input
+      type="text"
+      [ngModel]="editForm().title"
+      (ngModelChange)="updateField('title', $event)"
+      class="form-control"
+      placeholder="Enter product title"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Description:</label>
+    <input
+      type="text"
+      [ngModel]="editForm().description"
+      (ngModelChange)="updateField('description', $event)"
+      class="form-control"
+      placeholder="Enter product description"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Category: *</label>
+    <select
+      [ngModel]="editForm().catagoryId"
+      (ngModelChange)="updateField('catagoryId', $event)"
+      class="form-control"
+    >
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Price: *</label>
+    <input
+      type="number"
+      [ngModel]="editForm().price"
+      (ngModelChange)="updateField('price', $event)"
+      step="0.01"
+      min="0"
+      class="form-control"
+      placeholder="0.00"
+    />
+  </div>
+
+  <div class="form-group">
+    <label>Image URL:</label>
+    <input
+      type="text"
+      [ngModel]="editForm().image"
+      (ngModelChange)="updateField('image', $event)"
+      class="form-control"
+      placeholder="Enter image filename or URL"
+    />
+  </div>
+
+  <div class="edit-buttons">
+    <button class="btn-save" (click)="onSave()">
+      {{ isNewCard() ? "Add Product" : "Save" }}
+    </button>
+    <button class="btn-cancel" (click)="onCancel()">Cancel</button>
+  </div>
+</div>

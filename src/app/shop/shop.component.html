@@ -13,68 +13,15 @@
   </div>
 }
 
-<!-- Add New Card Form (shown when isAddingNew is true) -->
+<!-- Add New Card Form -->
 @if (isAddingNew()) {
   <div class="card card-new">
-    <div class="edit-form">
-      <h3>Add New Product</h3>
-
-      <div class="form-group">
-        <label>Title: *</label>
-        <input
-          type="text"
-          [(ngModel)]="editForm.title"
-          class="form-control"
-          placeholder="Enter product title"
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Description:</label>
-        <input
-          type="text"
-          [(ngModel)]="editForm.description"
-          class="form-control"
-          placeholder="Enter product description"
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Category: *</label>
-        <select [(ngModel)]="editForm.catagoryId" class="form-control">
-          @for (category of dataStore.categories(); track category.id) {
-            <option [value]="category.id">{{ category.name }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Price: *</label>
-        <input
-          type="number"
-          [(ngModel)]="editForm.price"
-          step="0.01"
-          min="0"
-          class="form-control"
-          placeholder="0.00"
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Image URL:</label>
-        <input
-          type="text"
-          [(ngModel)]="editForm.image"
-          class="form-control"
-          placeholder="Enter image filename or URL"
-        />
-      </div>
-
-      <div class="edit-buttons">
-        <button class="btn-save" (click)="saveCard()">Add Product</button>
-        <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
-      </div>
-    </div>
+    <app-edit-card
+      [categories]="dataStore.categories()"
+      [isNewCard]="true"
+      (save)="onSaveCard($event)"
+      (cancel)="cancelEdit()"
+    />
   </div>
 }
 
@@ -84,61 +31,13 @@
     <div class="card" [class.ordered]="getOrderedQuantity(card.id) > 0">
       @if (editingCardId() === card.id) {
         <!-- Edit Mode -->
-        <div class="edit-form">
-          <h3>Edit Product</h3>
-
-          <div class="form-group">
-            <label>Title: *</label>
-            <input
-              type="text"
-              [(ngModel)]="editForm.title"
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Description:</label>
-            <input
-              type="text"
-              [(ngModel)]="editForm.description"
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Category: *</label>
-            <select [(ngModel)]="editForm.catagoryId" class="form-control">
-              @for (category of dataStore.categories(); track category.id) {
-                <option [value]="category.id">{{ category.name }}</option>
-              }
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Price: *</label>
-            <input
-              type="number"
-              [(ngModel)]="editForm.price"
-              step="0.01"
-              min="0"
-              class="form-control"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Image URL:</label>
-            <input
-              type="text"
-              [(ngModel)]="editForm.image"
-              class="form-control"
-            />
-          </div>
-
-          <div class="edit-buttons">
-            <button class="btn-save" (click)="saveCard()">Save</button>
-            <button class="btn-cancel" (click)="cancelEdit()">Cancel</button>
-          </div>
-        </div>
+        <app-edit-card
+          [card]="editingCard()"
+          [categories]="dataStore.categories()"
+          [isNewCard]="false"
+          (save)="onSaveCard($event)"
+          (cancel)="cancelEdit()"
+        />
       } @else {
         <!-- View Mode -->
         <div class="card-header">
