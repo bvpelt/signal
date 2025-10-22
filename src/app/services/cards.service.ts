@@ -71,18 +71,27 @@ export class CardsService {
   }
 
   async searchCards(searchTerm: string): Promise<Card[]> {
-    await this.delay(50);
-    const term = searchTerm.toLowerCase();
-    const results = this.cards().filter(
-      (card) =>
-        card.title.toLowerCase().includes(term) ||
-        card.description.toLowerCase().includes(term),
-    );
     this.loggerService.debug(
       'CardsService',
-      `Search for "${searchTerm}" returned ${results.length} results`,
+      `Searching for cards with term: "${searchTerm}"`,
     );
-    return [...results];
+    await this.delay(50);
+    const allCards = await this.getCards();
+    const lowerTerm = searchTerm.toLowerCase();
+
+    const results = allCards.filter(
+      (card) =>
+        card.title.toLowerCase().includes(lowerTerm) ||
+        card.description.toLowerCase().includes(lowerTerm),
+    );
+
+    this.loggerService.trace(
+      'CardsService',
+      `Search returned ${results.length} results`,
+    );
+
+    // Return a deep copy, not the original references
+    return results.map((card) => ({ ...card }));
   }
 
   private delay(ms: number): Promise<void> {

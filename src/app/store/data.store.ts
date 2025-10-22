@@ -1,13 +1,14 @@
 import { Card } from '../data/card';
 import { Order } from '../data/order';
 import { Catagory } from '../data/catagory';
-import { computed, inject } from '@angular/core';
+import { computed, inject, Signal, Type } from '@angular/core';
 import {
   patchState,
   withState,
   signalStore,
   withMethods,
   withComputed,
+  StateSource,
 } from '@ngrx/signals';
 import { CardsService } from '../services/cards.service';
 import { OrdersService } from '../services/orders.service';
@@ -24,7 +25,7 @@ type DataState = {
   loadingOrders: boolean;
 };
 
-const initialState: DataState = {
+export const initialState: DataState = {
   categories: [],
   cards: [],
   orders: [],
@@ -295,3 +296,87 @@ export const DataStore = signalStore(
     };
   }),
 );
+function provide(
+  DataStore: Type<
+    {
+      categories: Signal<Catagory[]>;
+      cards: Signal<Card[]>;
+      orders: Signal<Order[]>;
+      selectedCategoryId: Signal<number | null>;
+      loadingCategories: Signal<boolean>;
+      loadingCards: Signal<boolean>;
+      loadingOrders: Signal<boolean>;
+      sortedCards: Signal<Card[]>;
+      sortedOrders: Signal<Order[]>;
+      cardCount: Signal<number>;
+      totalCardCount: Signal<number>;
+      categoryCount: Signal<number>;
+      orderCount: Signal<number>;
+      selectedCategoryName: Signal<string>;
+      loadAllCategories: () => Promise<void>;
+      selectCategory: (categoryId: number | null) => void;
+      clearCategoryFilter: () => void;
+      loadAllCards: () => Promise<void>;
+      updateCard: (card: Card) => Promise<void>;
+      addCard: (newCard: Omit<Card, 'id'>) => Promise<Card>;
+      deleteCard: (cardId: number) => Promise<void>;
+      searchCards: (searchTerm: string) => Promise<void>;
+      loadAllOrders: () => Promise<void>;
+      addToShoppingCard: (card: Card) => Promise<void>;
+      removeCardFromOrder: (card: Card) => Promise<void>;
+      clearOrders: () => void;
+      resetStore: () => void;
+    } & StateSource<{
+      categories: Catagory[];
+      cards: Card[];
+      orders: Order[];
+      selectedCategoryId: number | null;
+      loadingCategories: boolean;
+      loadingCards: boolean;
+      loadingOrders: boolean;
+    }>
+  >,
+  arg1: {
+    useClass: Type<
+      {
+        categories: Signal<Catagory[]>;
+        cards: Signal<Card[]>;
+        orders: Signal<Order[]>;
+        selectedCategoryId: Signal<number | null>;
+        loadingCategories: Signal<boolean>;
+        loadingCards: Signal<boolean>;
+        loadingOrders: Signal<boolean>;
+        sortedCards: Signal<Card[]>;
+        sortedOrders: Signal<Order[]>;
+        cardCount: Signal<number>;
+        totalCardCount: Signal<number>;
+        categoryCount: Signal<number>;
+        orderCount: Signal<number>;
+        selectedCategoryName: Signal<string>;
+        loadAllCategories: () => Promise<void>;
+        selectCategory: (categoryId: number | null) => void;
+        clearCategoryFilter: () => void;
+        loadAllCards: () => Promise<void>;
+        updateCard: (card: Card) => Promise<void>;
+        addCard: (newCard: Omit<Card, 'id'>) => Promise<Card>;
+        deleteCard: (cardId: number) => Promise<void>;
+        searchCards: (searchTerm: string) => Promise<void>;
+        loadAllOrders: () => Promise<void>;
+        addToShoppingCard: (card: Card) => Promise<void>;
+        removeCardFromOrder: (card: Card) => Promise<void>;
+        clearOrders: () => void;
+        resetStore: () => void;
+      } & StateSource<{
+        categories: Catagory[];
+        cards: Card[];
+        orders: Order[];
+        selectedCategoryId: number | null;
+        loadingCategories: boolean;
+        loadingCards: boolean;
+        loadingOrders: boolean;
+      }>
+    >;
+  },
+) {
+  throw new Error('Function not implemented.');
+}
